@@ -28,7 +28,7 @@ Built by **Joshe[cyberpriest]**.
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=['https://4c0a5fd0-e09f-442b-83b5-61dcdac17f0b-00-1qtzqo7v55eto.riker.replit.dev'],
     allow_methods=['*'],
     allow_headers=['*'],
     allow_credentials=True,

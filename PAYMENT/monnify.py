@@ -16,7 +16,8 @@ CONTRACTCODE = os.getenv('Contract_Code')
 
 def get_access_token()->str:
     creds = f'{APIKEY}:{SECRETKEY}'
-    encode_credss  = base64.b64decode(creds.encode()).decode()
+    encode_credss  = base64.b64encode(creds.encode()).decode()
+    
     res = httpx.post(
         f'{MONNIFY_BASE_URL}/api/v1/auth/login',
         headers = {'Authorization':f'Basic {encode_credss}'})
