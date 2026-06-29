@@ -3,19 +3,21 @@
 import base64 ,os 
 import httpx 
 from fastapi import HTTPException
+from dotenv import load_dotenv
 
+load_dotenv() 
 
 
 
 MONNIFY_BASE_URL = "https://sandbox.monnify.com"  # switch to live when ready
-APIKEY = os.getenv('APIKEY')
-SECRETKEY = os.getenv('Secret_Key')
-CONTRACTCODE = os.getenv('Contract_Code')
+MONNIFY_API_KEY = os.getenv('MONNIFY_API_KEY')
+MONNIFY_SECRET_KEY = os.getenv('MONNIFY_SECRET_KEY')
+MONNIFY_CONTRACT_CODE = os.getenv('MONNIFY_CONTRACT_CODE')
 
 
 
 def get_access_token()->str:
-    creds = f'{APIKEY}:{SECRETKEY}'
+    creds = f'{MONNIFY_API_KEY}:{MONNIFY_SECRET_KEY}'
     encode_credss  = base64.b64encode(creds.encode()).decode()
     
     res = httpx.post(
@@ -39,7 +41,7 @@ def initialize_payment(amount:float ,order_id:int,email:str):
         'paymentReference': f'TAMRT-ORDER-{order_id}',
         'paymentDescription': f'Payment for order {order_id}',
         'currencyCode': 'NGN',
-        'contractCode': CONTRACTCODE,
+        'contractCode': MONNIFY_CONTRACT_CODE,
         'redirectUrl': 'http://localhost:3000/payment/callback',
         'paymentMethods': ['CARD', 'ACCOUNT_TRANSFER']}
     )
