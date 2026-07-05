@@ -85,7 +85,7 @@ class Product(BaseModel):
     description:str
     price:float
     is_available:bool
-
+    image_url: str | None = None
 
 
 class ProductCreate(Product):
@@ -97,6 +97,7 @@ class ProductUpdate(BaseModel):
     price: float | None = None
     description: str | None = None
     is_available: bool | None = None
+    image_url: str | None = None
 
 class ProductRead(BaseModel):
     id:int
@@ -105,6 +106,7 @@ class ProductRead(BaseModel):
     description:str
     is_available:bool
     price:float
+    image_url: str | None = None
     model_config = ConfigDict(from_attributes=True)
 
 class ProductReadResponse(BaseModel):

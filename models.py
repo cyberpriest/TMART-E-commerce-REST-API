@@ -27,6 +27,7 @@ class Category(BASE):
     slug: Mapped[str] = mapped_column(String(150), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(tz=UTC))
     products: Mapped[list['Product']] = relationship('Product', back_populates='category')
+    
 @event.listens_for(Category, 'before_insert')
 def generate_slug(mapper, connection, target):
     target.slug = slugify(target.name)  # target is basically self here
@@ -39,6 +40,7 @@ class Product(BASE):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=False)
     price: Mapped[float] = mapped_column(Float, nullable=False)
+    image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     is_available: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(tz=UTC))
     category: Mapped['Category'] = relationship('Category', back_populates='products')
@@ -71,6 +73,7 @@ class Order(BASE):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'))
     total: Mapped[float] = mapped_column(Float, nullable=False)
+    payment_reference: Mapped[str] = mapped_column(String(150), nullable=True)
     status: Mapped[OrderStatus] = mapped_column(SQLAEnum(OrderStatus, name='order_status'), default=OrderStatus.PENDING, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(tz=UTC))
     user: Mapped['User'] = relationship('User', back_populates='orders')

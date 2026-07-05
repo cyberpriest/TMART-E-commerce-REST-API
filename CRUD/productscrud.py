@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session 
 from schema import ProductCreate,ProductUpdate
-from fastapi import HTTPException
+from fastapi import HTTPException ,UploadFile
 from models import Product,User,Category
 from utils.paginate import Paginate
+from utils.image import compress_image
 
 
 
@@ -43,6 +44,27 @@ def remove_product(db:Session,product_id:int,user:User):
     
     db.delete(product)
     db.commit()
+    return product
+
+
+
+def product_detail(db:Session,product_id:int):
+    product = db.query(Product).filter(Product.id == product_id).first() # product object
+    if not product:
+        raise HTTPException(status_code=404,detail='product not found')
+    
+    return product
+
+
+def upload_product_image(db:Session,product_id:int,image_url:UploadFile,user:User):
+    product = db.query(Product).filter(Product.id == product_id).first() # product object
+    if not product:
+        raise HTTPException(status_code=404,detail='product not found')
+    upload_file = compress_image(image_url)
+    
+    product.image_url = upload_file
+    db.commit()
+    db.refresh(product)
     return product
 
 

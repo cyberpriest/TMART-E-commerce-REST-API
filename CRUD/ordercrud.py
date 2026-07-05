@@ -21,11 +21,12 @@ VALID_TRANSITIONS = {
 
 
 def get_all_orders(db:Session,user:User,page:int=1 ,limit:int=10):
+    query = db.query(Order)
+
+    if user.role in [UserRole.STAFF, UserRole.ADMIN]:
+        query.all()
     query = db.query(Order).filter(Order.user_id == user.id)
 
-    is_authorized =  user.role in [UserRole.STAFF, UserRole.ADMIN]
-    if not is_authorized:
-        raise HTTPException(status_code=401,detail='not authorized')
     
     total_order  = query.count()
     page,limit = paginate.Paginate(page,limit)
@@ -50,7 +51,7 @@ def edit_order(db:Session,order_id:int,data:OrderUpdate,user:User):
     if data.status is not None:
         allow = VALID_TRANSITIONS.get(order.status,[])
         if data.status not in allow:
-            raise HTTPException(status_code=400,detail=f"cant move order from   {data.status}to  {order.status} ")
+            raise HTTPException(status_code=400,detail=f"cant move order from   {order.status}to  {data.status} ")
 
 
 

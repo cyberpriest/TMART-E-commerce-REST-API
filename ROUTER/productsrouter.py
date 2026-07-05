@@ -1,5 +1,6 @@
-from fastapi import APIRouter,Depends
-from CRUD.productscrud import get_all_products,update_product,remove_product,add_product
+from fastapi import APIRouter,Depends, File, UploadFile
+from CRUD.productscrud import get_all_products,update_product,\
+    remove_product,add_product,upload_product_image,product_detail
 from sqlalchemy.orm import Session
 from database import get_db
 from schema import ProductCreate,ProductRead,ProductUpdate,ProductReadResponse
@@ -50,3 +51,17 @@ def edit_products(
        
 ):
     return update_product(db,product_id,data,user)
+
+@product_router.get('/detail/{product_id}',response_model=ProductRead)
+def product_details(db: Session = Depends(get_db),product_id:int = 1):
+    return product_detail(db,product_id)
+
+@product_router.post('/upload-image/{product_id}',response_model=ProductRead)
+def upload_product_images(
+        product_id: int,
+        image_url: UploadFile = File(..., description="Upload an image file"),
+        db: Session = Depends(get_db),
+        user:User = Depends(required_role(UserRole.ADMIN,UserRole.STAFF))
+       
+):
+    return upload_product_image(db,product_id,image_url,user)
