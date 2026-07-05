@@ -26,9 +26,9 @@ _dump_file_path = _base_dir / 'utils' / 'logs.json'
 #                       SEEDING DUMMY DATA
 #============================================================
 
-def run_db():
-    BASE.metadata.drop_all(bind=engine)
-    BASE.metadata.create_all(bind=engine)
+# def run_db():
+#     BASE.metadata.drop_all(bind=engine)
+#     BASE.metadata.create_all(bind=engine)
 
 
 
@@ -155,7 +155,7 @@ def seed_products(db, categories, count: int = 5):
     
 
 def run():
-    run_db()
+    # run_db()
     db:Session = SessionLocal()
     try :
         a = seed_admin(db)
