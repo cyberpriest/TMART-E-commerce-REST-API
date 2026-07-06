@@ -1,0 +1,28 @@
+databases:
+  - name: tmart-db
+    databaseName: tmart
+    user: tmart_user
+    plan: free
+
+services:
+  - type: web
+    name: tmart-api
+    env: python
+    buildCommand: "pip install -r requirements.txt && alembic upgrade head"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    rootDir: backend
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tmart-db
+          property: connectionString
+      - key: MONNIFY_API_KEY
+        sync: false
+      - key: MONNIFY_SECRET_KEY
+        sync: false
+      - key: MONNIFY_CONTRACT_CODE
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: REFRESH_SECRET_KEY
+        sync: false
