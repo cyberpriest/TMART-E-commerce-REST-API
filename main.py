@@ -37,7 +37,7 @@ app.mount("/static", StaticFiles(directory=str(_static_dir)), name="static")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['https://4c0a5fd0-e09f-442b-83b5-61dcdac17f0b-00-1qtzqo7v55eto.riker.replit.dev'],
+    allow_origins=['https://tmart-fmcg-shop-760173621355.europe-west2.run.app'],
     allow_methods=['*'],
     allow_headers=['*'],
     allow_credentials=True,
