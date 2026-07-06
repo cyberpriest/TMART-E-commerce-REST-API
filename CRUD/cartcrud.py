@@ -23,7 +23,9 @@ def add_cart(db:Session,data:CartCreate,user:User):
         
         cartitem = CartItems(
             cart_id = cart.id,
-            product_id = items.product_id)
+            product_id = items.product_id,
+            quantity = items.quantity
+        )
         db.add(cartitem)
     db.commit()
     db.refresh(cart)
